@@ -14,14 +14,28 @@ document.addEventListener('DOMContentLoaded', () => {
         yesButton.style.cursor = "not-allowed";
         noButton.style.cursor = "not-allowed";
         responseDiv.style.display = "block";
-        responseDiv.innerText = "You already answered ❤️";
+
+        // Display the previous answer
+        const prevAnswer = localStorage.getItem('choice');
+        if(prevAnswer === 'Yes') {
+            responseDiv.innerText = "Thank you! :)";
+        } else if(prevAnswer === 'No') {
+            responseDiv.innerText = "Awww :(";
+        } else {
+            responseDiv.innerText = "You already answered ❤️";
+        }
+
         return; // Stop further execution
     }
 
     function answer(choice) {
-        // Show thank you message
+        // Show response depending on the choice
         responseDiv.style.display = "block";
-        responseDiv.innerText = "Thx for answering ❤️";
+        if(choice === 'Yes') {
+            responseDiv.innerText = "Thank you! :)";
+        } else if(choice === 'No') {
+            responseDiv.innerText = "Awww :(";
+        }
 
         // Disable buttons
         yesButton.disabled = true;
@@ -33,6 +47,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Mark as answered in localStorage
         localStorage.setItem('answered', 'true');
+        localStorage.setItem('choice', choice); // store the choice
 
         // Send answer to Discord webhook
         fetch(webhookURL, {
